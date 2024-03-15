@@ -1,4 +1,4 @@
-const socket = io('ws://localhost:3500')
+const socket = io('wss://chatapp-nodejs-socket-io-express.onrender.com:3500');
 
 const activity = document.querySelector('.activity')
 const msgInput = document.querySelector('input')
