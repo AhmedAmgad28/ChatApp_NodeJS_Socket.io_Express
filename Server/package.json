@@ -1,6 +1,18 @@
 {
+  "name": "chat_app",
+  "version": "1.0.0",
+  "description": "",
   "main": "Server.js",
   "type": "module",
+  "scripts": {
+    "start": "node Server.js"
+  },
+  "engines": {
+    "node":"20.x"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
     "express": "^4.18.3",
     "socket.io": "^4.7.5"
