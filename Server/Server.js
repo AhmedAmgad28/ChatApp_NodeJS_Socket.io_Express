@@ -9,8 +9,12 @@ const app = express()
 
 app.use(express.static(path.join(__dirname, "/Public")))
 
-app.get("/",(req,res)=>{
+app.get(["/","/index.html","/Public/index.html"],(req,res)=>{
     res.sendFile(path.join(__dirname + "/Public/index.html"))
+})
+
+app.get(["/script.js","/Public/script.js","/Server/Public/script.js"],(req,res)=>{
+    res.sendFile(path.join(__dirname + "/Public/script.js"))
 })
 
 const expressServer = app.listen(PORT, () => {
@@ -19,40 +23,25 @@ const expressServer = app.listen(PORT, () => {
 
 const io = new Server(expressServer);
 
-const userNames = {}; // Store custom names for each socket ID
-
 io.on('connection', socket => {
-    // Welcome message - only to the user
-    socket.emit('message', 'Welcome to Chat App!');
+    // Upon connection - only to user 
+    socket.emit('message', "Welcome to Chat App!")
 
-    // New user connected - to all others
-    socket.broadcast.emit('message', `${getUserName(socket)} connected`);
+    // Upon connection - to all others 
+    socket.broadcast.emit('message', `User ${socket.id.substring(0, 5)} connected`)
 
-    // Listening for a message event
+    // Listening for a message event 
     socket.on('message', data => {
-        io.emit('message', `${getUserName(socket)}: ${data}`);
-    });
+        io.emit('message', `${socket.id.substring(0, 5)}: ${data}`)
+    })
 
-    // When user disconnects - to all others
+    // When user disconnects - to all others 
     socket.on('disconnect', () => {
-        socket.broadcast.emit('message', `${getUserName(socket)} disconnected`);
-    });
+        socket.broadcast.emit('message', `User ${socket.id.substring(0, 5)} disconnected`)
+    })
 
-    // Listen for activity (Typing)
-    socket.on('activity', name => {
-        socket.broadcast.emit('activity', name);
-    });
-
-    // Set custom name for the user
-    socket.on('setUserName', name => {
-        userNames[socket.id] = name;
-    });
-});
-
-function getUserName(socket) {
-    // Check if a custom name is set for the socket ID
-    if (userNames[socket.id]) {
-        return userNames[socket.id];
-    }
-    return `User ${socket.id.substring(0, 5)}`;
-}
+    // Listen for activity 
+    socket.on('activity', (name) => {
+        socket.broadcast.emit('activity', name)
+    })
+})

@@ -14,13 +14,6 @@ function sendMessage(e) {
 
 document.querySelector('form').addEventListener('submit', sendMessage)
 
-let i = 1; // Initialize i
-
-// Emit setUserName event with custom name
-let username = `user${i}`;
-socket.emit('setUserName', username);
-
-
 // Listen for messages 
 socket.on("message", (data) => {
     activity.textContent = ""
@@ -34,8 +27,8 @@ msgInput.addEventListener('keypress', () => {
 })
 
 let activityTimer;
-socket.on("activity", (username) => {
-    activity.textContent = `${username} is typing...`
+socket.on("activity", (name) => {
+    activity.textContent = `${name} is typing...`
 
     // Clear after 3 seconds 
     clearTimeout(activityTimer)
@@ -43,4 +36,3 @@ socket.on("activity", (username) => {
         activity.textContent = ""
     }, 3000)
 })
-i++; // Increment i
