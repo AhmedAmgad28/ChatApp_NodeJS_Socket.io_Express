@@ -7,7 +7,7 @@ const __dirname = path.dirname(__filename)
 const PORT = process.env.PORT || 3500
 const app = express()
 
-app.use(express.static(path.join(__dirname, "public")))
+app.use(express.static(path.join(__dirname, "/Public")))
 
 app.get("/",(req,res)=>{
     res.sendFile(path.join(__dirname + "/Public/index.html"))
